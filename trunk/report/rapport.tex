@@ -1,0 +1,379 @@
+\documentclass[10pt,a4paper,notitlepage]{article}
+\usepackage[titles]{mypack}
+
+\docinfo {
+\small{
+	\begin{flushleft}
+	\end{flushleft}
+	}
+}
+%----------------------------------------------------------
+
+%--------- Title page -----------
+\title{Covering codes in Sierpinski graphs}
+\subtitle{}
+\author{
+	\student{Glacet} {Christian} \vskip 0.2cm 
+}
+\teacher{Tutor : Paul Dorbec}
+%---------------------------------------------------------
+
+
+% Jumps between "paragraphs"
+\setlength\parskip{0.1cm}
+
+%MARGE
+\geometry{scale=0.8,nohead}
+
+\setlength{\unitlength}{1mm}
+\setcounter{secnumdepth}{2}
+\makeindex
+
+\begin{document}
+\reversemarginpar{}
+%-------Title--------
+\maketitle
+
+%------Abstract------
+\begin{abstract}
+This is a short introduction to the article "Covering codes in Sierpinski graphs" (\cite{Art}). 
+%% What is an ab-code ? Why are they used here ?
+\ABc, also named [$a,b$]-dominating, are a generalisation of covering codes and 
+perfect weighted codes. That kind of codes are used for errors detection/corection 
+and also for domination problems. 
+In this paper, \ABc are used to show some particularities of covreing codes overall.
+%% Why mix them together ?
+Sierpinski graph are used because they have a structure that allow to show properties 
+on \ABc easily.
+%% What i'm going to do :
+First I will explain some useful principles to understand the domain of \cite{Art}.
+Following will show main results of this paper and some keys to understand proofs.
+Finally, I will explain the idea of the proof of the theorem (5.1 in the original paper) 
+that show how to make a particular \ABc in a Sierpinski graph.
+\end{abstract}
+\Hline{0.8 pt}
+\bigjump
+
+%-------------------------------------------- --------- Domain definitions :
+\section{Definitions} 
+
+
+%--------------------------------covering codes 
+\subsection{Covering code - Error correcting code}\label{sec:covercode}
+
+The hamming distance is the number of digit that differ between two words.
+A 1-covering code (covering code of radius 1) is a code that allows to correct any
+ single-bit error (hamming distance $=$ 1), or detect all two(or less)-bit errors 
+ in a word (hamming distance $\leq$ 2). Here is an example of such a code, 
+ the Hamming(7,4) introduced in \cite{hamm} by Richard W. Hamming.
+
+\paragraph{Encoding :}
+The technique used is quite simple, we add 3 parity bit (\red{$p_{1}$},\red{$p_{2}$},\red{$p_{3}$}) 
+to the original binary word (\blue{$d_{1}d_{2}d_{3}d_{4}$}) of lenght 4 :
+
+
+%% Transformation of the actual data to the transfered message :
+\begin{center}
+\begin{tabular}{c | c | c c c c c c c}
+    original message & encoding & \red{$p_{1}$} & \red{$p_{2}$} & \blue{$d_{1}$} & \red{$p_{3}$} & \blue{$d_{2}$} & \blue{$d_{3}$} & \blue{$d_{4}$}\\
+    \blue{1100} & $\Longrightarrow$ & \red{0} & \red{1} & \blue{1} & \red{1} & \blue{1} & \blue{0} & \blue{0}
+\end{tabular}
+\end{center}
+
+%% Equation used to caculate parity bit :
+\[
+\left\{\begin{matrix}
+    \red{p_{1}} = & \blue{d_{1}} + \blue{d_{2}} + \blue{d_{4}} = \red{0}\\
+    \red{p_{2}} = & \blue{d_{1}} + \blue{d_{3}} + \blue{d_{4}} = \red{1}\\
+    \red{p_{3}} = & \blue{d_{2}} + \blue{d_{3}} + \blue{d_{4}} = \red{1}
+\end{matrix}\right.
+\]
+
+\paragraph{Correcting single-bit errors :} Now assume that the data-bit \blue{$d_{2}$} 
+has the wrong value ($\blue{d_{2}} = 0$), so we have :
+
+%% Sent and received message :
+\begin{center}
+\begin{tabular}{c c c}
+    sent message &  & received message\\
+    \red{0}\red{1}\blue{1}\red{1}\blue{1}\blue{0}\blue{0} & $\Longrightarrow$  & \red{0}\red{1}\blue{1}\red{1}\underline{\bf{0}}\blue{0}\blue{0} 
+\end{tabular}
+\end{center}
+
+%% Calculation of real parity bit values :
+\[
+\left\{\begin{matrix}
+    p_{1}' = & \blue{1} + \blue{0} + \blue{0} = 1\\
+    p_{2}' = & \blue{1} + \blue{0} + \blue{0} = \red{1}\\
+    p_{3}' = & \blue{0} + \blue{0} + \blue{0} = 0
+\end{matrix}\right.
+\]
+\\
+
+%% Conclusions about the differences between expected and actual parities value :
+We have two parity changes ($p_{1'} \neq \red{p_{1}}$ and $p_{3} \neq \red{p_{3}}$), that means there is an error in $\blue{d_{2}}$ or $\blue{d_{4}}$.
+But $\red{p_{3}}$ parity hasn't changes, that means there is no error in all $\blue{d_{1}},\blue{d_{3}},\blue{d_{4}}$ bit. So, we can now correct the error on $\blue{d_{2}}$, changing from 0 to 1.
+
+%% For curious people :
+\paragraph{Other covering codes :} You can see more examples and a classification of covering codes in \cite{CoveringClass}.
+
+
+%--------------------------------ab-codes :
+\subsection{\ABc}
+
+
+%% Definition of what is an ab-code
+\paragraph{Definition :}
+\noindent Let $G$ be a graph and $C$ a set of vertices, $G$ is an \ABc if :
+\begin{itemize}
+    \item all vertices belong to $C$ have $a$ neighbors in C,
+    \item all vertices belong to $G \setminus C$ have $b$ neighbors in C
+\end{itemize}
+
+%% PETERSEN and ab-codes :
+\paragraph{Examples :}~(black vertices belong to the code) 
+\begin{figure}[ht]
+    \begin{minipage}[b]{0.5\linewidth}
+        \image{0.4}{petersen_2-1code.png}{a) \C{2}{1} in Petersen pentagon graph}
+    \end{minipage}
+    \hspace{0.5cm}
+    \begin{minipage}[b]{0.5\linewidth}
+        \image{0.4}{petersen_1-3code.png}{b) \C{1}{3} in Petersen pentagon graph}
+    \end{minipage}
+\end{figure}
+
+If all vertices belong to the code this is an \C{3}{0}.
+\textit{Note that a \C{0}{1} is a perfect code, similar to the covering showed in \ref{sec:covercode}}.
+
+
+%--------------------------------Sierpinski graphs :
+\subsection{\Sgs}
+
+%% Construction of an Sierpinski graph
+A Sierpinski graph (\Snk) is a fractal graph. The construction of such a graph is recursive :
+\begin{enumerate}[i)]
+    \item Construct a \Kc (\K{k}) vertices set \S{1}{k}.
+    \item Then build the next (\S{i}{k}) graph with $k$ subgraphs : \S{i-1}{k}
+    and make a \Kc with those subgraphs (consider each subgraph as a vertice).
+    \item Repeat ii) till $i >= n$.
+\end{enumerate}
+\paragraph{Example :} here is a \S{2}{3} 
+\\
+\begin{picture}(40,50)(-70,-40)
+   %%% S1 = S(1,3)
+   \put(0,0){\circle*{1}}
+   \put(-3,2){\shortstack[rt]{\vertice{00}}}
+   \put(-10,-10){\circle*{1}}
+   \put(-17,-9){\shortstack[l]{\vertice{01}}}
+   \put(10,-10){\circle*{1}}
+   \put(10,-9){\shortstack[rt]{\vertice{02}}}
+   \put(9.5,-10){\line(-1,0){20}}
+   \put(10,-9.5){\line(-1,1){9.5}}
+   \put(-10,-9.5){\line(1,1){9.5}}
+   %%% S2 = S(1,3)
+   \put(14,-14){\circle*{1}}
+   \put(16,-14){\shortstack[rt]{\vertice{20}}}
+   \put(4,-24){\circle*{1}}
+   \put(1,-28){\shortstack[rt]{\vertice{21}}}
+   \put(24,-24){\circle*{1}}
+   \put(25,-24){\shortstack[rt]{\vertice{22}}}
+   \put(23.5,-24){\line(-1,0){20}}
+   \put(24,-23.5){\line(-1,1){9.5}}
+   \put(4,-23.5){\line(1,1){9.5}}
+   %%% S3 = S(1,3)
+   \put(-14,-14){\circle*{1}}
+   \put(-22,-14){\shortstack[rt]{\vertice{10}}}
+   \put(-24,-24){\circle*{1}}
+   \put(-32,-24){\shortstack[rt]{\vertice{11}}}
+   \put(-4,-24){\circle*{1}}
+   \put(-8,-28){\shortstack[rt]{\vertice{12}}}
+   \put(-4.5,-24){\line(-1,0){20}}
+   \put(-4,-23.5){\line(-1,1){9.5}}
+   \put(-24,-23.5){\line(1,1){9.5}}
+   %%% S = S(2,3)
+   \put(-14,-13.5){\line(1,1){4}}
+   \put(14,-13.5){\line(-1,1){4}}
+   \put(3.5,-24){\line(-1,0){7.5}}
+\end{picture}\label{fig:sierpinskiG}
+\\ %% Explication on labels and structure of the graph :
+All \vertice{ii...i} vertices are called extreme vertices, others are called inner. \\
+In \S{n}{k} graphs, two vertices \Nvertice{u}{i_{1}i_{2}...i_{n}} and \Nvertice{v}{ j_{1}j_{2}...j_{n}} are adjacents iif an index $h$ exists in $ \lbrace 1,2,\ldots,n \rbrace $ such that :
+\begin{itemize}
+    \item $i_{t} = j_{t}$ for $t = 1,\ldots,h-1$
+    \item $i_{h} \neq j_{h}$
+    \item $i_{t} = j_{h}$ and $i_{h} = j_{t}$ for $t = h+1,\ldots,n$
+\end{itemize}
+
+%% Example regarding labels :
+\paragraph{Examples :}
+\Nvertice{u}{135755} and \Nvertice{v}{135577} are adjacents ($h=4$)
+\begin{center}
+\begin{tabular}{c | c | c}
+\blue{135} &  \red{7} &  55 \\
+\blue{135} &  5 &  \red{77} \\
+\end{tabular}
+\end{center}
+ditto for \Nvertice{u}{12}and \Nvertice{v}{21} ($h=1$)
+\begin{center}
+\begin{tabular}{c | c}
+\red{1} &  2 \\
+2 &  \red{1} \\
+\end{tabular}
+\end{center}
+
+
+%-------------------------ab-code in Sierpinski graphs :
+\section{\ABc in \Sgs}
+
+%% A proof using some key properties :
+\subsection{Interdependence of a and b in \Sgs}
+
+The authors of \cite{Art} have proved that the only possible (a,b) values for an \ABc in a Sierpinski graph are : \textbf{(a,a), (a,a+1) and (a,a+2)}. 
+Extreme vertices or \Kc properties are essentialy used to prove that (lemma 3.2 to lemma 3.5 in \cite{Art}).
+For example in lemma 3.2  : Let $C$ be an \ABc in \Snk and \Kk its \Kc, they have proved that
+\begin{center}
+$ \mid C \cap K_{k} \mid \leq a + 1$
+\end{center}
+using \Kc properties ; If the number of vertices  $\mid C \cap K_{k} \mid > a+1$ then any vertice from this set has more than $a$ neighbors, which is impossible because any vertice from the code should have exactly a neighbors.
+\\
+And they have proved that 
+\begin{center}
+$ b-1 \leq \mid C \cap K_{k} \mid$
+\end{center}
+using extreme vertices properties (existence of extreme vertices) ; If there is extreme vertices, then the \Snk graph is not regular so the code cannot be the whole graph.
+Let $u \notin C$, so $u$ has $b$ neighbors in $C$, but one of them can be out of the \Kc, so  $  \mid C \cap K(u) \mid \geq b-1$ (and $b \leq k$).
+Finaly, we have :
+\begin{itemize}
+\item $\mid C \cap K_{k} \mid \geq b-1$ if $C \cap $ \Kk 
+\item or $\mid C \cap K_{k} \mid = k (\geq b)$ if $C \subset$ \Kk 
+\end{itemize}
+
+
+%--------------------------------Construction TH5.1 :
+\subsection{Construction of \C{a}{a+1} in \Snk}\label{sec:construct}
+
+This construction is based on recusion on $n$, the following explanation of theorem 5.1 (from \cite{Art}) is driven alongside an \C{1}{2} in \S{n}{3} construction.
+At each step, let $i < n$, build $k=3$ complete graphs by matching $k$ sub-graphs (\S{i-1}{k}) together, these $k$ graphs are called ($S_{1},S_{2},S_{3}, \ldots, S_{k}$).
+For all $u \in \Snk$ the following properties should be respected throughout the construction :
+%% Extremal vertices that belong to the code 
+\[\left.\begin{matrix}
+    | N(u) \cap  C ) | & = & a & \Rightarrow &\bullet_{*}~
+\\  | N(u) \cap  C ) | & = & a -1 & \Rightarrow &\bullet_{+}~
+\end{matrix}\right\}if ~ u \in C\]
+\begin{center}
+or 
+%% Extremal vertices that not belong to the code 
+\end{center}
+\[\left.\begin{matrix}
+    | N(u) \cap  C ) | & = & a + 1 = b & \Rightarrow &\circ_{*}~
+\\  | N(u) \cap  C ) | & = & a & \Rightarrow &\circ_{+}~
+\end{matrix}\right\}if ~ u \notin C\]
+
+%% Explication regarding about + and * notation, and possibles matches :
+\textit{The notation + is  short for "need one more neighbor that belong to the code"}. 
+Inner vertices have necessarily the correct number of neighbors from the code (recussion hypothesis), so the notation is used only for extremal vertices. And the only possible extremal vertices matches are :  $\circ_{+}$ --- $\bullet_{+}$, $\bullet_{+}$ --- $\bullet_{+}$, $\circ_{*}$ --- $\circ_{*}$ otherwise, ($a,b$) restrictions will be broken (that is the key of this proof).
+Let define the following near codes, wich are the only possible ones :
+%
+%% Possible code on sierpinski (odd) :
+\[\left.\begin{matrix}
+    SO^{n} & has & a+1 & \bullet_{*} & and & k-a-1 & \circ_{*} \\
+    WO^{n} & has & a & \bullet_{+} & and & k-a & \circ_{+}
+\end{matrix}\right\}n ~ is ~ odd\]
+
+%% Possible code on sierpinski (even) :
+\[\left.\begin{matrix}
+    SE^{n} & has & a & \bullet_{+} & and & k-a & \bullet_{*} \\
+    WE^{n} & has & a+1 & \circ_{*} & and & k-a-1 & \circ_{*}
+\end{matrix}\right\}n ~ is ~ even\]
+
+%% Goal :
+Furthermore, at last step of the construction ($ i = n-1$), the number of + should be at most egal to $k-1$, because only $k-1$ vertices could have a new neighbor that belong to the code (Sierpinski structure imposes that).
+%
+%
+%% I = 1
+\begin{itemize}
+\item For $i = 1$, two possible graph (modulo isomorphisms)
+\\
+\begin{picture}(40,20)(-50,-12)
+   \put(0,0){\circle{2}}\put(1,1){\shortstack[rt]{+}}
+   \put(-10,-10){\circle{2}}\put(-14,-12){\shortstack[rt]{+}}
+   \put(10,-10){\circle*{2}}\put(11.5,-12){\shortstack[rt]{+}}
+   \put(9,-10){\line(-1,0){18}}
+   \put(10,-9){\line(-1,1){9}}
+   \put(-10,-9){\line(1,1){9}}
+   \put(-3.5,-7){\shortstack[c]{$SO^{1}$}}
+\end{picture}
+\begin{picture}(40,20)(-70,-12)
+   \put(0,0){\circle{2}}\put(1,1){\shortstack[rt]{*}}
+   \put(-10,-10){\circle*{2}}\put(-14,-12){\shortstack[rt]{*}}
+   \put(10,-10){\circle*{2}}\put(11.5,-12){\shortstack[rt]{*}}
+   \put(9,-10){\line(-1,0){20}}
+   \put(10,-9){\line(-1,1){9}}
+   \put(-10,-9){\line(1,1){9}}
+   \put(-3.5,-7){\shortstack[c]{$WO^{1}$}}
+\end{picture}
+
+\begin{itemize}
+\item \textbf{W}eak-\textbf{O}dd graphs have $a$ $\bullet_{+}$ vertices, $k-a$ others are $\circ _{+}$. All neighbors for the next step ($i+1$) should obviously be $\bullet_{+}$ (comming from another WO);
+\item \textbf{S}trong-\textbf{O}dd graphs have $a+1$ $\bullet_{*}$ vertices, $k-a-1$ others are $\circ _{*}$. They obviously can't have $\bullet$ neighbors;
+\end{itemize}
+
+%
+%
+%% I even 
+\item For $i$ even, supose that there is a $\circ_{*}$ in one of the previous sub-graphs (\S{i-1}{3} : $S_{1},S_{2},S_{3}$) that will remain extremal. Without lost of generality, we now assume that it is $S_{1}$ :
+\begin{enumerate}[i)]
+\item Thus $S_{1}$ is isomorphic to $SO^{i-1}$ (cause $WO$ graphs do not contain $\circ_{*}$), 
+so there is $a+1$ (here 2) $\bullet_{*}$ that must be matched with a $\circ_{+}$. 
+
+\item Therefore $S_{2}$ and $S_{3}$ are isomorphic to $WO^{i-1}$.
+These two graphs ($S_{2}$ and $S_{3}$) can be matched in one way, each $\bullet_{+}$ vertice should be matched to another $\bullet_{+}$ vertice.
+
+\item It remains finally $k = 3$ unmatched vertices (extremal vertices), $k-a-1$ $\circ_{*}$ and $a+1$ $\circ_{+}$, in other words, \S{i}{3} is isomorphic to $WE^{i}$. 
+\end{enumerate}
+
+Here is a graphical representation of the process :
+
+%% WE i Construction
+\image{0.6}{IR1.png}{}
+
+%% Other cases
+If the original vertex is not a $\circ_{*}$ the proof is exactly the same, 
+with $\circ_{+}$ the construction ends to an $WE^{i}$, 
+with $\bullet_{+}$ or $\bullet_{*}$ that ends to an $SE^{i}$.
+
+%
+%
+%% I odd 
+\item For $i$ odd, supose that there is a $\bullet_{*}$ in one of the previous sub-graphs (\S{i-1}{3} : $S_{1},S_{2},S_{3}$) that will remain extremal. Without lost of generality, we now assume that it is $S_{1}$ :
+\begin{enumerate}[i)]
+\item Thus $S_{1}$ is isomorphic to $SE^{i-1}$ (cause $WE$ graphs do not contain $\bullet_{*}$), 
+so there is $k-a-1$ (here 1) $\bullet_{*}$ that must be matched with a $\circ_{+}$. And $a$ (here 1) $\bullet_{+}$ that must be matched with a $\bullet_{+}$.
+
+\item Therefore $S_{2}$ is isomorphic to $WE^{i-1}$ and $S_{3}$ is isomorphic to $SE^{i-1}$.
+These graphs ($S_{2}$ and $S_{3}$) can be matched in one way, each $\circ_{+}$ vertice should be matched to another $\bullet_{*}$ vertice.
+
+\item It remains finally $k = 3$ unmatched vertices (extremal vertices), $a+1$ $\bullet_{*}$ and $k-a-1$ $\circ_{*}$, \S{i}{3} is isomorphic to $SO^{i}$. The actual graph is an \C{a}{a+1}. 
+\end{enumerate}
+Here is a graphical representation of the process :
+
+%% SO i Construction
+\image{0.6}{IR2.png}{}
+
+%% Other cases
+If the original vertex is not a $\bullet_{*}$ the proof is exactly the same, 
+with $\circ_{*}$ the construction ends to an $SO^{i}$ (wich is an \C{a}{a+1} too),
+with $\bullet_{+}$ or $\circ_{+}$ that ends to an $WO^{i}$.
+
+\end{itemize}
+
+\section{Conclusion}
+It could be interseting to do a more precise construction (for \ref{sec:construct}) using label (seen in \ref{fig:sierpinskiG} example).
+Or maybe show that constructed code in this section are unique or not.
+
+\hugejump
+
+\bibliographystyle{IEEEtranS}
+\bibliography{Bibliographie/sierp}
+
+\end{document}

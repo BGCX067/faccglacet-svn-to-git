@@ -1,0 +1,234 @@
+\documentclass{beamer}
+
+%----------------------Package et options-----------------------------
+\usepackage[titles]{mypack}
+
+
+\usetheme{Berkeley}
+\usecolortheme{seahorse}
+%\usetheme{Hannover}
+\usefonttheme[onlylarge]{structurebold}
+\setbeamerfont*{frametitle}{size=\normalsize,series=\bfseries}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{blocks}[rounded][shadow=true]
+
+\setlength{\unitlength}{1mm}
+
+%-------------------------Page de garde-------------------------------
+
+\title[] 
+{%
+  Initiation \`a la recherche \\
+  Codes couvrant dans les graphes de Sierpinski
+}
+
+\author[]
+{%
+  Christian GLACET \and \\%
+  \textbf{Tuteur :} Paul Dorbec
+}
+
+\date[WABI 2009]
+{Universit\'e de Bordeaux 1, 2009-2010}
+
+\begin{document}
+
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+
+%---------------------------Sommaire---------------------------------
+\begin{frame}{Sommaire}
+  \tableofcontents
+\end{frame}
+
+%----------------------------Intro-----------------------------------
+\renewcommand{\secName}{P\'esentation du domaine \xspace}
+\section{\secName}
+
+%--------AB codes---------------------------------------------------------------------------------------------------------AB codes -------
+\renewcommand{\subSecName}{\ABc}
+\subsection{\subSecName}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% --> Ne pas trop s'attarder là-dessus
+
+\begin{myframe}{d\'efinitions}
+\ABc : 
+    \begin{block}{Code couvrant}
+    	L'alphabet $\alpha = \lbrace 0,1 \rbrace^{3}$ est couvert par le code $C = \lbrace 000, 111 \rbrace$ (rayon 1)
+    \end{block}
+    \begin{block}{Code couvrant $\Rightarrow$ Correction d'erreurs}
+    	Transmission de messages
+    \end{block}
+    \begin{block}{Problème de domination (couverture de graphe)}
+        Problèmes de routage (backbone)
+    \end{block}
+\end{myframe}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% - Les ab codes sont une g\'en\'eralisation des codes couvrant
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% - Ils peuvent \'egalement être \'etudi\'es dans le 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% cadre de la recherche d'ensembles dominant
+
+\begin{myframe}{exemple}
+    Voici un \C{1}{3} sur le pentagone de Petersen :
+        \image{0.37}{petersen_1-3code.png}{}
+   Les $\bullet$ appatiennnent au code, les $\circ$ non.
+\end{myframe}
+
+\begin{myframe}{exemple}
+    Voici un \C{1}{3} sur le pentagone de Petersen :
+        \image{0.37}{petersen_1-3codeA.png}{}
+   $\rightarrow$ Mise en \'evidence de la composante \textbf{a = 1} du code.
+\end{myframe}
+
+\begin{myframe}{exemple}
+    Voici un \C{1}{3} sur le pentagone de Petersen :
+        \image{0.37}{petersen_1-3codeB.png}{}
+    $\rightarrow$ Mise en \'evidence de la composante \textbf{b = 3} du code.
+\end{myframe}
+
+
+%--------Sierpinski-------------------------------------------------------------------------------------------------------------Sierpinski-------
+\renewcommand{\subSecName}{\Sgs (\Snk)}
+\subsection{\subSecName}
+
+\begin{myframe}{Exemple d'un \S{2}{3}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% - Dire ce que représente graphiquement parlant les n et k
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% - Introduire ainsi la notion de construction 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% récursive de ce type de graphe
+   \begin{picture}(40,30)(-45,-30)
+       %%% S1 = S(1,3)
+       \put(0,0){\circle*{1}}
+       \put(-3,2){\shortstack[rt]{\vertice{00}}}
+       \put(-10,-10){\circle*{1}}
+       \put(-17,-9){\shortstack[l]{\vertice{01}}}
+       \put(10,-10){\circle*{1}}
+       \put(10,-9){\shortstack[rt]{\vertice{02}}}
+       \put(9.5,-10){\line(-1,0){20}}
+       \put(10,-9.5){\line(-1,1){9.5}}
+       \put(-10,-9.5){\line(1,1){9.5}}
+       %%% S2 = S(1,3)
+       \put(14,-14){\circle*{1}}
+       \put(16,-14){\shortstack[rt]{\vertice{20}}}
+       \put(4,-24){\circle*{1}}
+       \put(1,-28){\shortstack[rt]{\vertice{21}}}
+       \put(24,-24){\circle*{1}}
+       \put(25,-24){\shortstack[rt]{\vertice{22}}}
+       \put(23.5,-24){\line(-1,0){20}}
+       \put(24,-23.5){\line(-1,1){9.5}}
+       \put(4,-23.5){\line(1,1){9.5}}
+       %%% S3 = S(1,3)
+       \put(-14,-14){\circle*{1}}
+       \put(-22,-14){\shortstack[rt]{\vertice{10}}}
+       \put(-24,-24){\circle*{1}}
+       \put(-32,-24){\shortstack[rt]{\vertice{11}}}
+       \put(-4,-24){\circle*{1}}
+       \put(-8,-28){\shortstack[rt]{\vertice{12}}}
+       \put(-4.5,-24){\line(-1,0){20}}
+       \put(-4,-23.5){\line(-1,1){9.5}}
+       \put(-24,-23.5){\line(1,1){9.5}}
+       %%% S = S(2,3)
+	   \color{red}
+       \put(-14,-13.5){\line(1,1){4}}
+       \put(14,-13.5){\line(-1,1){4}}
+       \put(3.5,-24){\line(-1,0){7.5}}
+    \end{picture}
+	\pause
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% - ICI, si le public boude, énnocer rapidement la règle 
+    \begin{block}{Définitions}
+        \begin{itemize}
+            \item $n$ est le nombre d'ittérations nécessaire
+            \item $k$ est le nombre de sommets dans clique maximale (nomée \Kk, est isomorphique à \S{1}{k})
+        \end{itemize}
+    \end{block}
+    \small{\textit{Une r\`egle r\'egie les noms des sommets, elle est d\'efinie mais pas utilis\'ee dans 
+    l'article.}}
+\end{myframe}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% - Parler de la particularité des sommets externes (degré)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% - Dire aussi que si on construit S(n+1,k) on aura un de ces 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% sommets qui sera toujours externe.
+\begin{myframe}
+    \begin{block}{Particularit\'ees}
+    Deux types de sommets :
+        \begin{itemize}
+            \item Sommets externes : degré $= k-1$ 
+            \\ notation : X($\Snk$)
+            \item Sommets internes : degré $= k$ 
+            \\ notation : $\Snk\setminus X(\Snk)$
+        \end{itemize}
+        
+        $k$ sommets sont externes et $k^{n}-k$ internes.
+    \end{block}
+\end{myframe}
+
+% ------AB-code dans S(n,k)--------------------------------------------------------------------------------------------AB-code dans S(n,k)------------
+\renewcommand{\secName}{P\'esentation du sujet de l'\'etude \xspace}
+\section{\secName}
+
+%--------Exemple--------
+\renewcommand{\subSecName}{un \ABc~sur un \Snk}
+\subsection{\subSecName}
+
+\begin{myframe}
+       \C{1}{3} sur un \S{2}{3} :
+       \\
+   \begin{picture}(40,50)(-45,-45)
+       %%% S1 = S(1,3)
+       \put(0,0){\circle*{2}}
+       \put(-10,-10){\circle{2}}
+       \put(10,-10){\circle*{2}}
+       \put(9,-10){\line(-1,0){18}}
+       \put(10,-9.5){\line(-1,1){9.5}}
+       \put(-10,-9){\line(1,1){9}}
+       %%% S2 = S(1,3)
+       \put(14,-14){\circle{2}}
+       \put(4,-24){\circle*{2}}
+       \put(24,-24){\circle*{2}}
+       \put(23.5,-24){\line(-1,0){20}}
+       \put(24,-23.5){\line(-1,1){9}}
+       \put(4,-23.5){\line(1,1){9}}
+       %%% S3 = S(1,3)
+       \put(-14,-14){\circle*{2}}
+       \put(-24,-24){\circle*{2}}
+       \put(-4,-24){\circle{2}}
+       \put(-5,-24){\line(-1,0){20}}
+       \put(-4.8,-23.5){\line(-1,1){9.0}}
+       \put(-24,-23.5){\line(1,1){9.5}}
+       %%% S = S(2,3)
+       \put(-14,-13.5){\line(1,1){3}}
+       \put(13.5,-13.3){\line(-1,1){2.7}}
+       \put(4.5,-24){\line(-1,0){7.5}}
+    \end{picture}
+\end{myframe}
+
+
+%-----Clefs pour les preuves----------------------------------------------------------------------------------------Clefs pour les preuves-------- 
+% Formation rapide \`a la logique
+\renewcommand{\subSecName}{Clefs principales}
+\subsection{\subSecName}
+
+\begin{myframe}
+    \begin{itemize}
+        \item Utilisation des propri\'et\'es de Sierpinski (sommets externes)
+        \item Associations possibles entre sous graphes \Kc.
+    \end{itemize} 
+\end{myframe}
+
+%--------Propri\'et\'es-------- 
+% Quelques r\`egles et propri\'et\'es (mise en bouche :p)
+\renewcommand{\subSecName}{premi\`ere propri\'et\'es}
+\subsection{\subSecName}
+\begin{myframe}
+    \begin{itemize}
+        \item $C$ est un \ABc, alors $ \mid C \cap K_{k} \mid \leq a + 1$
+        \item seuls les \C{a}{a}, \C{a}{a+1} et \C{a}{a+2} exsitent sur les \Sgs
+        \item un \C{a}{a+1} ne peut être construit que sur des \Snk avec $n$ impair.
+    \end{itemize}
+\end{myframe}
+
+
+\end{document}
+

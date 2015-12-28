@@ -1,0 +1,171 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{mypack}[2009/02/02]
+
+%---- Options  ----
+\newif\if@titles     \@titlesfalse
+\DeclareOption{titles}{\@titlestrue}
+\DeclareOption*{\PassOptionsToPackage{\CurrentOption}{babel}}
+\ProcessOptions
+%---------------------
+
+%---- Packages ---
+\RequirePackage{url}
+\RequirePackage[utf8x]{inputenc} 
+\RequirePackage[english]{babel}
+\RequirePackage{amsmath}
+\RequirePackage{amsfonts}
+\RequirePackage{amssymb}
+\RequirePackage{graphicx}
+\RequirePackage{cite}
+\RequirePackage{xspace}
+\RequirePackage{pict2e}
+\RequirePackage{parsetree}
+\RequirePackage{lscape}
+\RequirePackage{makeidx}
+\RequirePackage{moreverb}
+\RequirePackage{examplep}
+\RequirePackage{color}
+\RequirePackage{multirow}
+\RequirePackage{enumerate}
+\RequirePackage{geometry}
+%---------------------
+
+%--- Normalisation des espaces verticaux
+\newcommand{\smalljump}{\vskip 0.1cm}
+\newcommand{\jump}{\vskip 0.2cm}
+\newcommand{\largejump}{\vskip 0.3cm}
+\newcommand{\bigjump}{\vskip 1cm}
+\newcommand{\hugejump}{\vskip 2cm}
+\newcommand{\HUGEjump}{\vskip 4cm}
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+
+% Short : 
+\newcommand{\K}[1]{$K_{#1}$\xspace}
+\newcommand{\Kk}{\K{k}}
+\newcommand{\Kc}{$k-$clique\xspace}
+\renewcommand{\S}[2]{$S(#1,#2)$\xspace}
+\newcommand{\Snk}{\S{n}{k}}
+\newcommand{\Sg}{graphe de Sierpinski\xspace}
+\newcommand{\Sgs}{graphes de Sierpinski\xspace}
+\newcommand{\C}[2]{$(#1,#2)-$code\xspace}
+\newcommand{\ABc}{\C{a}{b}}
+\newcommand{\vertice}[1]{$\langle #1 \rangle$}
+\newcommand{\Nvertice}[2]{$#1 = \langle #2 \rangle$}
+
+
+
+%--- Ajout d'une marge au verbatim dans une box : \begin{code} Blabla \end{code}
+\newenvironment{code}
+{ \center \nopagebreak \jump \scriptsize \boxedverbatim}
+{ \endboxedverbatim \jump}
+
+
+
+% Commande pour les noms de section
+\newcommand{\subSecName}{Nom de sous section}
+\newcommand{\secName}{Nom de section}
+
+%%%% POUR BEAMER %%%%%
+\newenvironment{myframe}[1][]
+{ \begin{frame}{\secName - \subSecName \small{\textit{#1}}} }
+{ \end{frame} }
+
+
+%--- Tracer une ligne horizontale (0.4 pt est une taille correcte)
+\newcommand{\Hline}[1]{	\noindent\rule{\linewidth}{#1} }
+
+%--- Evite d'ecrire Second Life en entier, idem pour Liden lab
+\newcommand{\fan}{Fantom\xspace}
+
+%--- Si l'option titre est pass�e en parametre
+\if@titles
+	\makeatletter
+	%-- Red�finition du formatage des subsubsections --
+	\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}
+		{\z@}
+		{-3.25ex\@plus -1ex \@minus -.2ex}
+		{1.5ex \@plus .2ex}
+		{\centering\normalsize\bf\itshape}
+	}
+	%---------------------------------------
+	
+	%------- Red�finition du formatage du titre (Bordeaux 1) -----------
+	\def\maketitle{%
+			\noindent\includegraphics[scale=0.6]{Images/logo_bd1.png} \\
+			\noindent\small LABRI - Bordeaux, university of science 
+			\null
+			\begin{center}
+				\hugejump
+				{\LARGE \bf \@title}
+				\smalljump
+				{\large \@subtitle}
+				\largejump
+				\@author
+				\jump
+				\large \@teacher
+				\jump
+				\Hline{0.5 pt}
+			\end{center}
+	}
+	\def\teacher#1{\def\@teacher{#1}}
+	\def\subtitle#1{\def\@subtitle{#1}}
+	\def\docinfo#1{\def\@docinfo{#1}}
+	%---------------------------------------
+	\makeatother
+\fi
+%--- Fin titres
+
+%------ Citation avec nom de l'auteur (de la citation), -------
+%------   utilisation :  \myquote {Citation}{Auteur}    -------
+\newcommand{\myquote}[2]{%
+	\begin{quote}\og#1\fg\end{quote}
+	\begin{flushright}
+		\textit{#2}
+	\end{flushright}
+}
+%--------------------------------------
+
+%------ Image avec l�gende (caption genere des bugs) -------------
+\newcommand{\image}[3]{%
+\noindent
+\begin{center}
+\includegraphics[scale=#1]{Images/#2} \smalljump
+%ajouter une compteur pour les num�ro des figures 
+\textit{#3}
+\end{center}
+}
+%---------------------------------------
+
+
+%---- Mise en valeur des mots importants --------------
+%ANCIENNE VERSION : 
+%\newcommand{\k  word}[1]{%
+%\marginpar{\fontfamily{phv}\selectfont \textsc{\scriptsize{#1}}}%
+%\textbf{#1}\xspace%
+%\index{#1}%
+%}
+%NOUVELLE VERSION plus simple (sans les annotations en marge) :
+\newcommand{\keyword}[1]{%
+\textbf{#1}%
+\index{#1}%
+}
+%--------------------------------------
+
+%- Mails �tudiants :
+\newcommand{\etumail}[1]{$<$#1@etu.u-bordeaux1.fr$>$\xspace}
+%- Auteur avec son mail
+\newcommand{\student}[2]{\rm{\large{#1 #2}} \\ \small{\tt{\etumail{\lowercase{#2.#1}}}} }
+\newcommand{\studentpmail}[3]{\rm{\large{#1 #2}} \\ \small{\tt{\etumail{\lowercase{#3}}}} }
+%- Date de la derni�re d'�dition 
+\newcommand{\dateLastEdit}[1]{Date de dernière mise à jour : #1}
+%- Date de cr�ation du document 
+\newcommand{\dateFirstEdit}[1]{Date de premiére mise en ligne : #1}
+%- Version de l'application concern�e par le document
+\newcommand{\versionApp}[1]{Version de l'application concernàe : #1}
+%- R�f�rence en ligne du document
+\newcommand{\reference}[1]{Reference en ligne : \url{#1}}
+%- Etat actuel du document
+\newcommand{\docState}[1]{Etat : #1}
+
+\endinput
